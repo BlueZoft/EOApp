@@ -14,8 +14,6 @@ class CustomerForm extends StatefulWidget {
     return CustomerFormState();
   }
 }
-
-
 class CustomerFormState extends State<CustomerForm> {
   final formKey = GlobalKey<FormState>();
 
@@ -31,45 +29,47 @@ class CustomerFormState extends State<CustomerForm> {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> postUser() async {
-  final response = await http.post(
-    Uri.parse('http://localhost:5000/api/userdata'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'name': _name,
-      'age': _age,
-      'NIC': _nic,
-      'sex': _sex,
-      'tel': _telephone,
-      'addr': _address,
-      'email': _email,
-      'inquiry': _inquiry,
-      'branch': _branch,
-      'askLoan': widget.askLoan
-    }),
-  );
+    postUser() async {
+      try {
+      final response =
+          await http.post(Uri.parse('http://localhost:5000/api/userdata'),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+              },
+              body: jsonEncode(<String, String>{
+                'name': _name,
+                'age': _age,
+                'NIC': _nic,
+                'sex': _sex,
+                'tel': _telephone,
+                'addr': _address,
+                'email': _email,
+                'inquiry': _inquiry,
+                'branch': _branch,
+                'askLoan': widget.askLoan
+              }));
 
-  if (response.statusCode == 200) {
-    final message = '$_name, විමසීම සාර්ථකයි.';
-    final snackBar = SnackBar(
-      content: Text(message),
-      backgroundColor: Colors.blue,
-      duration: Duration(milliseconds: 4000),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  } else {
-    final message = 'ඔබේ විමසුම මේ අවස්ථාවේදී පද්ධතියට ලබාගත නොහැක.';
-    final snackBar = SnackBar(
-      content: Text(message),
-      backgroundColor: Colors.deepOrange,
-      duration: Duration(milliseconds: 4000),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      if (response.statusCode == 200) {
+        final message = '$_name, විමසීම සාර්ථකයි.';
+        final snackBar = SnackBar(
+          content: Text(message),
+          backgroundColor: Colors.blue,
+          duration: Duration(milliseconds: 4000),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else {
+        final message = 'ඔබේ විමසුම මේ අවස්ථාවේදී පද්ධතියට ලබාගත නොහැක.';
+        final snackBar = SnackBar(
+          content: Text(message),
+          backgroundColor: Colors.deepOrange,
+          duration: Duration(milliseconds: 4000),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    } catch (e) {
+    print('Caught error: $e');
   }
 }
-
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -339,8 +339,8 @@ class CustomerFormState extends State<CustomerForm> {
             ),
             icon: Icon(Icons.home),
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.cyan),
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              backgroundColor: WidgetStateProperty.all<Color>(Colors.cyan),
+              foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
             ),
             onPressed: () =>Navigator.popUntil(context, ModalRoute.withName('/')),
           )),
